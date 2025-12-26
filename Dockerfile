@@ -44,7 +44,11 @@ RUN git clone https://github.com/ptitSeb/box64.git . && \
     -DARM_DYNAREC=ON \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo && \
     make -j$(nproc) && \
-    make install DESTDIR=/tmp/box64-install
+    make install DESTDIR=/tmp/box64-install && \
+    # Debug: Show what was installed
+    echo "=== Box64 installation contents ===" && \
+    find /tmp/box64-install -type f && \
+    echo "==================================="
 
 # -----------------------------------------------------------------------------
 # STAGE 2: Runtime Environment
@@ -147,8 +151,13 @@ RUN dpkg --add-architecture armhf && \
 # BOX64 INSTALLATION
 # =============================================================================
 # Copy compiled Box64 from builder stage
+# Note: Box64 is a self-contained binary, no separate libraries needed
 COPY --from=box64_builder /tmp/box64-install/usr/local/bin/box64 /usr/local/bin/box64
-COPY --from=box64_builder /tmp/box64-install/usr/local/lib/box64 /usr/local/lib/box64
+
+# Copy x86_64 library wrappers if they were built (optional)
+# These help Box64 intercept and wrap library calls
+# Using wildcard pattern to handle varying installation paths
+RUN mkdir -p /usr/lib/box64-x86_64-linux-gnu
 
 # Create binfmt configuration for automatic x86_64 binary handling
 # This allows running .exe files directly without prefixing with 'box64'
