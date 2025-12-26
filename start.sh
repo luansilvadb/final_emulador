@@ -113,20 +113,28 @@ log_info "BOX64_LOG: ${BOX64_LOG:-0}"
 # =============================================================================
 log_section "Wine Configuration"
 
+# Add Wine x86_64 to PATH (installed at /opt/wine)
+# This is critical for Box64 to find the wine binaries
+export PATH="/opt/wine/bin:${PATH}"
+export WINEDLLPATH="/opt/wine/lib/wine"
+export LD_LIBRARY_PATH="/opt/wine/lib:${LD_LIBRARY_PATH:-}"
+log_info "Wine PATH configured: /opt/wine/bin"
+
 # Check if Wine prefix exists and is properly initialized
 # The system.reg file is a reliable indicator of a complete Wine prefix
 if [ ! -f "${WINEPREFIX}/system.reg" ]; then
     log_info "Wine prefix not found. Initializing 64-bit prefix at ${WINEPREFIX}..."
     
     # wineboot -i: Initialize Wine prefix (creates registry, system folders)
+    # Use Box64 to run the x86_64 wineboot binary
     # Redirect output to prevent noise in container logs
-    WINEARCH=win64 wineboot -i > /dev/null 2>&1 || {
+    WINEARCH=win64 box64 /opt/wine/bin/wineboot -i > /dev/null 2>&1 || {
         log_error "Wine prefix initialization failed!"
         exit 1
     }
     
     # Wait for Wine server to stabilize before proceeding
-    wineserver -w
+    box64 /opt/wine/bin/wineserver -w
     
     log_info "Wine prefix initialized successfully."
 else
@@ -134,7 +142,7 @@ else
 fi
 
 # Display Wine version for debugging purposes
-WINE_VERSION=$(wine64 --version 2>/dev/null || echo "unknown")
+WINE_VERSION=$(box64 /opt/wine/bin/wine64 --version 2>/dev/null || echo "unknown")
 log_info "Wine version: ${WINE_VERSION}"
 
 # =============================================================================
@@ -430,9 +438,19 @@ SERVER_ARGS=(
 # SERVER_ARGS+=(-gamePort "${GAME_PORT}")
 # SERVER_ARGS+=(-queryPort "${QUERY_PORT}")
 
+# Verify Wine binary exists before launching
+WINE64_PATH="/opt/wine/bin/wine64"
+if [ ! -f "${WINE64_PATH}" ]; then
+    log_error "Wine64 binary not found at ${WINE64_PATH}"
+    log_error "Please check the Wine installation in the Docker image."
+    exit 1
+fi
+log_info "Wine64 binary: ${WINE64_PATH}"
+
 # Launch the server via Box64 -> Wine -> VRisingServer.exe
+# Using absolute path to wine64 to ensure Box64 finds it
 # Redirect stderr to stdout for unified logging
-box64 wine64 ./VRisingServer.exe "${SERVER_ARGS[@]}" 2>&1 &
+box64 "${WINE64_PATH}" ./VRisingServer.exe "${SERVER_ARGS[@]}" 2>&1 &
 SERVER_PID=$!
 
 log_info "Server process started with PID: ${SERVER_PID}"

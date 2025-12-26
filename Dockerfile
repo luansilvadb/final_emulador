@@ -106,6 +106,9 @@ ENV DEBIAN_FRONTEND=noninteractive \
     MALLOC_CHECK_=0 \
     # Memory allocation tuning for Unity
     MALLOC_MMAP_THRESHOLD_=131072 \
+    # Wine x86_64 paths (for Box64 to find wine binaries)
+    PATH="/opt/wine/bin:/usr/local/bin:/usr/bin:/bin" \
+    LD_LIBRARY_PATH="/opt/wine/lib" \
     # ---------------------------------------------------------------------
     # V Rising Server Settings (can be overridden)
     # ---------------------------------------------------------------------
@@ -115,10 +118,8 @@ ENV DEBIAN_FRONTEND=noninteractive \
 # =============================================================================
 # PACKAGE INSTALLATION
 # =============================================================================
-# Add armhf (32-bit ARM) architecture for potential future compatibility needs
 # Install runtime dependencies in a single layer to minimize image size
-RUN dpkg --add-architecture armhf && \
-    apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     # Basic utilities
     wget \
     curl \
@@ -128,7 +129,7 @@ RUN dpkg --add-architecture armhf && \
     ca-certificates \
     # Virtual display server (Unity requires a display context)
     xvfb \
-    # Wine dependencies
+    # Wine dependencies (x86_64 Wine running under Box64 needs these)
     cabextract \
     libgl1 \
     libx11-6 \
@@ -136,16 +137,45 @@ RUN dpkg --add-architecture armhf && \
     libfontconfig1 \
     libxext6 \
     libxrender1 \
+    libxcomposite1 \
+    libxcursor1 \
+    libxi6 \
+    libxrandr2 \
+    libxfixes3 \
+    libxxf86vm1 \
+    libasound2 \
+    libpulse0 \
+    libdbus-1-3 \
+    libgnutls30 \
     # Process management
     gosu \
     procps \
-    # Wine packages from Debian repositories
-    # Note: For bleeding-edge Wine, consider WineHQ staging builds
-    wine \
-    wine64 \
-    libwine \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
+
+# =============================================================================
+# WINE x86_64 INSTALLATION (for Box64)
+# =============================================================================
+# IMPORTANT: We need x86_64 Wine binaries, NOT ARM64 native Wine!
+# Box64 will emulate these x86_64 binaries on ARM64 hardware.
+# Using Wine from Kron4ek's portable builds (widely used for Box64)
+ENV WINE_VERSION="9.22"
+ENV WINE_BRANCH="staging"
+
+RUN mkdir -p /opt/wine && \
+    cd /opt/wine && \
+    # Download Wine x86_64 portable build
+    wget -q "https://github.com/Kron4ek/Wine-Builds/releases/download/${WINE_VERSION}/wine-${WINE_VERSION}-${WINE_BRANCH}-amd64.tar.xz" -O wine.tar.xz && \
+    tar -xf wine.tar.xz --strip-components=1 && \
+    rm wine.tar.xz && \
+    # Create symlinks to make wine accessible
+    ln -sf /opt/wine/bin/wine64 /usr/local/bin/wine64 && \
+    ln -sf /opt/wine/bin/wine /usr/local/bin/wine && \
+    ln -sf /opt/wine/bin/wineserver /usr/local/bin/wineserver && \
+    ln -sf /opt/wine/bin/wineboot /usr/local/bin/wineboot && \
+    ln -sf /opt/wine/bin/winecfg /usr/local/bin/winecfg && \
+    # Verify installation
+    echo "Wine x86_64 installed at /opt/wine"
 
 # =============================================================================
 # BOX64 INSTALLATION
