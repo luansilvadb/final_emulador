@@ -199,9 +199,10 @@ RUN mkdir -p /etc/binfmt.d && \
 # =============================================================================
 # Create non-root user for security (never run game servers as root)
 # The PUID/PGID can be adjusted via environment variables to match host user
+# Using addgroup/adduser which are available in Debian base image
 RUN mkdir -p ${WINEPREFIX} ${INSTALL_DIR} /data/save-data /data/logs && \
-    groupadd -g ${PGID} vrising && \
-    useradd -u ${PUID} -g ${PGID} -d /data -s /bin/bash vrising && \
+    addgroup --gid ${PGID} vrising && \
+    adduser --uid ${PUID} --gid ${PGID} --home /data --shell /bin/bash --disabled-password --gecos "" vrising && \
     chown -R vrising:vrising /data
 
 # =============================================================================
