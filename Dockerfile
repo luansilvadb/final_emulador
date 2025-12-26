@@ -107,7 +107,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     # Memory allocation tuning for Unity
     MALLOC_MMAP_THRESHOLD_=131072 \
     # Wine x86_64 paths (for Box64 to find wine binaries)
-    PATH="/opt/wine/bin:/usr/local/bin:/usr/bin:/bin" \
+    PATH="/opt/wine/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin" \
     LD_LIBRARY_PATH="/opt/wine/lib" \
     # ---------------------------------------------------------------------
     # V Rising Server Settings (can be overridden)
