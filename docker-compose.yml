@@ -1,0 +1,176 @@
+# =============================================================================
+# V Rising Dedicated Server - Docker Compose Configuration
+# =============================================================================
+# Deployment Target: Easypanel (or any Docker Compose compatible orchestrator)
+# Architecture: ARM64 with Box64 emulation
+# =============================================================================
+
+version: '3.8'
+
+services:
+  vrising:
+    # -------------------------------------------------------------------------
+    # Image Configuration
+    # -------------------------------------------------------------------------
+    # Option 1: Build from local Dockerfile
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    # Option 2: Use pre-built image from registry (uncomment and modify)
+    # image: ghcr.io/your-org/vrising-arm64:latest
+
+    container_name: vrising-server
+    hostname: vrising-server
+
+    # -------------------------------------------------------------------------
+    # Restart Policy
+    # -------------------------------------------------------------------------
+    # unless-stopped: Restart always except when manually stopped
+    # Handles crashes and system reboots gracefully
+    restart: unless-stopped
+
+    # -------------------------------------------------------------------------
+    # Security
+    # -------------------------------------------------------------------------
+    # The container handles privilege dropping internally via gosu
+    # Running as privileged=false is recommended for security
+    privileged: false
+
+    # -------------------------------------------------------------------------
+    # Network Configuration
+    # -------------------------------------------------------------------------
+    # V Rising uses UDP for game traffic. TCP is not required.
+    ports:
+      # Game Port: Player connections
+      - "9876:9876/udp"
+      # Query Port: Steam server browser visibility
+      - "9877:9877/udp"
+
+    # -------------------------------------------------------------------------
+    # Environment Variables
+    # -------------------------------------------------------------------------
+    # These can be adjusted via Easypanel's GUI or .env file
+    environment:
+      # Server Identity
+      - SERVER_NAME=${SERVER_NAME:-V Rising Docker ARM64}
+      - SAVE_NAME=${SAVE_NAME:-world_main}
+
+      # Timezone (for correct log timestamps)
+      - TZ=${TZ:-America/Sao_Paulo}
+
+      # User/Group IDs (match with host if using bind mounts)
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+
+      # -----------------------------------------------------------------
+      # Box64 Performance Tuning
+      # -----------------------------------------------------------------
+      # STRONGMEM: Enforce x86 memory ordering (stability vs performance)
+      # Values: 0 (disabled), 1 (enabled), 2 (forced)
+      - BOX64_DYNAREC_STRONGMEM=${BOX64_DYNAREC_STRONGMEM:-1}
+
+      # BIGBLOCK: Larger translation blocks (better CPU cache usage)
+      # Values: 0-3, higher = larger blocks
+      - BOX64_DYNAREC_BIGBLOCK=${BOX64_DYNAREC_BIGBLOCK:-1}
+
+      # FASTNAN: Simplified floating-point NaN handling
+      - BOX64_DYNAREC_FASTNAN=${BOX64_DYNAREC_FASTNAN:-1}
+
+      # Logging level (0=none, 1=info, 2=debug, 3=trace)
+      - BOX64_LOG=${BOX64_LOG:-1}
+
+      # -----------------------------------------------------------------
+      # Wine Configuration
+      # -----------------------------------------------------------------
+      - WINEDEBUG=${WINEDEBUG:--all}
+
+      # -----------------------------------------------------------------
+      # Debug Mode (set to 1 for verbose script logging)
+      # -----------------------------------------------------------------
+      - DEBUG=${DEBUG:-0}
+
+    # -------------------------------------------------------------------------
+    # Data Persistence
+    # -------------------------------------------------------------------------
+    # All game data is stored under /data in the container
+    volumes:
+      # Option 1: Named volume (Docker-managed, recommended for Easypanel)
+      - vrising-data:/data
+      # Option 2: Bind mount (direct host path, uncomment if needed)
+      # - /etc/easypanel/projects/vrising/data:/data
+      # - ./data:/data
+
+      # Pre-configured BepInEx files from Windows (read-only)
+      # These files are generated on Windows and copied to ARM64 automatically
+      - ./mods:/mods-source:ro
+      # -------------------------------------------------------------------------
+      # Resource Limits
+      # -------------------------------------------------------------------------
+      # CRITICAL: Unity games under emulation are resource-intensive
+    deploy:
+      resources:
+        limits:
+          # Memory limit (8GB recommended minimum)
+          # Unity + Wine + Box64 can easily use 4-6GB
+          # BepInEx with mods adds 1-2GB more
+          memory: 16G
+
+          # CPU limit (4 cores minimum recommended)
+          # Emulation overhead requires additional CPU headroom
+          cpus: '4'
+
+        reservations:
+          # Guaranteed minimum resources
+          memory: 4G
+          cpus: '2'
+
+    # -------------------------------------------------------------------------
+    # Logging Configuration
+    # -------------------------------------------------------------------------
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
+
+    # -------------------------------------------------------------------------
+    # Health Check
+    # -------------------------------------------------------------------------
+    healthcheck:
+      # Check if VRisingServer process is running
+      test: [ "CMD-SHELL", "pgrep -f VRisingServer || exit 1" ]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      # Server takes time to initialize, especially under emulation
+      start_period: 180s
+
+    # -------------------------------------------------------------------------
+    # Stop Configuration
+    # -------------------------------------------------------------------------
+    # Give the server time to save world data on shutdown
+    stop_grace_period: 60s
+
+# =============================================================================
+# Volume Definitions
+# =============================================================================
+volumes:
+  vrising-data:
+    driver: local
+    # Optional: Configure local driver options for specific paths
+    # driver_opts:
+    #   type: none
+    #   o: bind
+    #   device: /path/on/host
+
+    # =============================================================================
+    # Network Definitions (Optional)
+    # =============================================================================
+    # Uncomment if you need custom network configuration
+    # networks:
+    #   vrising-net:
+    #     driver: bridge
+    #     ipam:
+    #       config:
+    #         - subnet: 172.20.0.0/16

@@ -1,0 +1,29 @@
+{
+    "Name": "Velion",
+    "Description": "Servidor dedicado brasileiro - Bem-vindo ao Velion!",
+    "Port": 9876,
+    "QueryPort": 9877,
+    "MaxConnectedUsers": 100,
+    "MaxConnectedAdmins": 5,
+    "ServerFps": 60,
+    "SaveName": "world1",
+    "Password": "",
+    "Secure": true,
+    "ListOnMasterServer": true,
+    "ListOnEOS": true,
+    "AutoSaveCount": 25,
+    "AutoSaveInterval": 120,
+    "CompressSaveFiles": true,
+    "GameSettingsPreset": "",
+    "GameDifficultyPreset": "Difficulty_Brutal",
+    "AdminOnlyDebugEvents": true,
+    "DisableDebugEvents": false,
+    "API": {
+        "Enabled": false
+    },
+    "Rcon": {
+        "Enabled": true,
+        "Port": 25575,
+        "Password": "master.007,1"
+    }
+}

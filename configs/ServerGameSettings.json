@@ -1,0 +1,219 @@
+{
+    "GameModeType": "PvP",
+    "CastleDamageMode": "TimeRestricted",
+    "SiegeWeaponHealth": "High",
+    "PlayerDamageMode": "Always",
+    "CastleHeartDamageMode": "CanBeSeizedOrDestroyedByPlayers",
+    "PvPProtectionMode": "Short",
+    "DeathContainerPermission": "Anyone",
+    "RelicSpawnType": "Unique",
+    "CanLootEnemyContainers": true,
+    "BloodBoundEquipment": true,
+    "TeleportBoundItems": true,
+    "AllowGlobalChat": true,
+    "AllWaypointsUnlocked": false,
+    "FreeCastleClaim": false,
+    "FreeCastleDestroy": false,
+    "InactivityKillEnabled": true,
+    "InactivityKillTimeMin": 3600,
+    "InactivityKillTimeMax": 259200,
+    "InactivityKillSafeTimeAddition": 86400,
+    "InactivityKillTimerMaxItemLevel": 84,
+    "DisableDisconnectedDeadEnabled": true,
+    "DisableDisconnectedDeadTimer": 45,
+    "InventoryStacksModifier": 2.0,
+    "DropTableModifier_General": 1.0,
+    "DropTableModifier_Missions": 1.5,
+    "DropTableModifier_Resources": 1.25,
+    "MaterialYieldModifier_Global": 1.5,
+    "BloodEssenceYieldModifier": 1.5,
+    "BatBoundItems": false,
+    "BatBoundShards": true,
+    "JournalVBloodSourceUnitMaxDistance": 25.0,
+    "PvPVampireRespawnModifier": 1.5,
+    "CastleMinimumDistanceInFloors": 3,
+    "ClanSize": 10,
+    "BloodDrainModifier": 1.25,
+    "DurabilityDrainModifier": 1.5,
+    "GarlicAreaStrengthModifier": 1.25,
+    "HolyAreaStrengthModifier": 1.25,
+    "SilverStrengthModifier": 1.25,
+    "SunDamageModifier": 1.25,
+    "CastleDecayRateModifier": 0.5,
+    "CastleBloodEssenceDrainModifier": 1.25,
+    "CastleSiegeTimer": 600.0,
+    "CastleUnderAttackTimer": 90.0,
+    "AnnounceSiegeWeaponSpawn": true,
+    "ShowSiegeWeaponMapIcon": true,
+    "BuildCostModifier": 1.0,
+    "RecipeCostModifier": 1.0,
+    "CraftRateModifier": 2.0,
+    "ResearchCostModifier": 1.0,
+    "RefinementCostModifier": 1.0,
+    "RefinementRateModifier": 2.0,
+    "ResearchTimeModifier": 0.75,
+    "DismantleResourceModifier": 0.75,
+    "ServantConvertRateModifier": 1.5,
+    "RepairCostModifier": 1.25,
+    "Death_DurabilityFactorLoss": 0.5,
+    "Death_DurabilityLossFactorAsResources": 1.0,
+    "StarterEquipmentId": 0,
+    "StarterResourcesId": 0,
+    "VBloodUnitSettings": [],
+    "UnlockedAchievements": [],
+    "UnlockedResearchs": [],
+    "GameTimeModifiers": {
+        "DayDurationInSeconds": 720.0,
+        "DayStartHour": 9,
+        "DayStartMinute": 0,
+        "DayEndHour": 17,
+        "DayEndMinute": 0,
+        "BloodMoonFrequency_Min": 5,
+        "BloodMoonFrequency_Max": 10,
+        "BloodMoonBuff": 0.25
+    },
+    "VampireStatModifiers": {
+        "MaxHealthModifier": 1.0,
+        "MaxEnergyModifier": 1.0,
+        "PhysicalPowerModifier": 1.0,
+        "SpellPowerModifier": 1.0,
+        "ResourcePowerModifier": 1.0,
+        "SiegePowerModifier": 1.0,
+        "DamageReceivedModifier": 1.2,
+        "ReviveCancelDelay": 3.0
+    },
+    "UnitStatModifiers_Global": {
+        "MaxHealthModifier": 1.0,
+        "PowerModifier": 1.4
+    },
+    "UnitStatModifiers_VBlood": {
+        "MaxHealthModifier": 1.75,
+        "PowerModifier": 2.0,
+        "LevelIncrease": 5
+    },
+    "EquipmentStatModifiers_Global": {
+        "MaxEnergyModifier": 1.0,
+        "MaxHealthModifier": 1.0,
+        "ResourceYieldModifier": 1.0,
+        "PhysicalPowerModifier": 1.0,
+        "SpellPowerModifier": 1.0,
+        "SiegePowerModifier": 1.0,
+        "MovementSpeedModifier": 1.0
+    },
+    "CastleStatModifiers_Global": {
+        "TickPeriod": 5.0,
+        "DamageResistance": 0.0,
+        "SafetyBoxLimit": 1,
+        "TombLimit": 6,
+        "VerminNestLimit": 2,
+        "PylonPenalties": {
+            "Range1": {
+                "Percentage": 0.0,
+                "Lower": 0,
+                "Higher": 2
+            },
+            "Range2": {
+                "Percentage": 0.1,
+                "Lower": 3,
+                "Higher": 3
+            },
+            "Range3": {
+                "Percentage": 0.25,
+                "Lower": 4,
+                "Higher": 4
+            },
+            "Range4": {
+                "Percentage": 0.4,
+                "Lower": 5,
+                "Higher": 5
+            },
+            "Range5": {
+                "Percentage": 0.6,
+                "Lower": 6,
+                "Higher": 254
+            }
+        },
+        "FloorPenalties": {
+            "Range1": {
+                "Percentage": 0.0,
+                "Lower": 0,
+                "Higher": 20
+            },
+            "Range2": {
+                "Percentage": 0.1,
+                "Lower": 21,
+                "Higher": 40
+            },
+            "Range3": {
+                "Percentage": 0.25,
+                "Lower": 41,
+                "Higher": 60
+            },
+            "Range4": {
+                "Percentage": 0.4,
+                "Lower": 61,
+                "Higher": 100
+            },
+            "Range5": {
+                "Percentage": 0.6,
+                "Lower": 101,
+                "Higher": 254
+            }
+        },
+        "HeartLimits": {
+            "Level1": {
+                "Level": 1,
+                "FloorLimit": 40,
+                "ServantLimit": 3
+            },
+            "Level2": {
+                "Level": 2,
+                "FloorLimit": 100,
+                "ServantLimit": 5
+            },
+            "Level3": {
+                "Level": 3,
+                "FloorLimit": 180,
+                "ServantLimit": 7
+            },
+            "Level4": {
+                "Level": 4,
+                "FloorLimit": 280,
+                "ServantLimit": 9
+            },
+            "Level5": {
+                "Level": 5,
+                "FloorLimit": 400,
+                "ServantLimit": 12
+            }
+        },
+        "CastleLimit": 1
+    },
+    "PlayerInteractionSettings": {
+        "TimeZone": "Local",
+        "VSPlayerWeekdayTime": {
+            "StartHour": 18,
+            "StartMinute": 0,
+            "EndHour": 23,
+            "EndMinute": 59
+        },
+        "VSPlayerWeekendTime": {
+            "StartHour": 10,
+            "StartMinute": 0,
+            "EndHour": 23,
+            "EndMinute": 59
+        },
+        "VSCastleWeekdayTime": {
+            "StartHour": 20,
+            "StartMinute": 0,
+            "EndHour": 23,
+            "EndMinute": 0
+        },
+        "VSCastleWeekendTime": {
+            "StartHour": 15,
+            "StartMinute": 0,
+            "EndHour": 23,
+            "EndMinute": 0
+        }
+    }
+}

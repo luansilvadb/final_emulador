@@ -1,0 +1,23 @@
+[Message: Preloader] BepInEx 6.0.0-dev - VRisingServer (26/12/2025 01:03:35)
+[Message: Preloader] Built from commit 3a12d1810bf4dd5ca1635352ccf5bff5d95f987f
+[Info   :   BepInEx] System platform: Windows 10 64-bit
+[Info   :   BepInEx] Process bitness: 64-bit (x64)
+[Info   :   BepInEx] Running under Unity 2022.3.58f1
+[Info   :   BepInEx] Runtime version: 6.0.7
+[Info   :   BepInEx] Runtime information: .NET 6.0.7
+[Info   : Preloader] 0 patcher plugins loaded
+[Info   : Preloader] 0 assemblies discovered
+[Message:AssemblyPatcher] Executing 0 patch(es)
+[Message:   BepInEx] Chainloader initialized
+[Warning:Il2CppInterop] Class::Init signatures have been exhausted, using a substitute!
+[Info   :Il2CppInterop] Registered mono type Il2CppInterop.Runtime.DelegateSupport+Il2CppToMonoDelegateReference in il2cpp domain
+[Info   :   BepInEx] 2 plugins to load
+[Info   :   BepInEx] Loading [VampireCommandFramework 0.10.4]
+[Message:VampireCommandFramework] VCF Loaded: 0.10.4
+[Info   :   BepInEx] Loading [KindredLogistics 1.6.0]
+[Error  :   BepInEx] Error loading [KindredLogistics 1.6.0]: System.IO.FileNotFoundException: Could not load file or assembly 'HookDOTS.API, Version=1.1.0.0, Culture=neutral, PublicKeyToken=null'. O sistema não pode encontrar o arquivo especificado.
+File name: 'HookDOTS.API, Version=1.1.0.0, Culture=neutral, PublicKeyToken=null'
+   at KindredLogistics.Plugin.Load()
+   at BepInEx.Unity.IL2CPP.IL2CPPChainloader.LoadPlugin(PluginInfo pluginInfo, Assembly pluginAssembly) in C:\Work\-\VRisingBepInExBuild\BepInEx\Runtimes\Unity\BepInEx.Unity.IL2CPP\IL2CPPChainloader.cs:line 136
+   at BepInEx.Bootstrap.BaseChainloader`1.LoadPlugins(IList`1 plugins) in C:\Work\-\VRisingBepInExBuild\BepInEx\BepInEx.Core\Bootstrap\BaseChainloader.cs:line 411
+[Message:   BepInEx] Chainloader startup complete
